@@ -4,11 +4,20 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
+
 
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class PluginCircle extends MyPlugin implements MyPluginInterface {
 
@@ -59,6 +68,33 @@ public class PluginCircle extends MyPlugin implements MyPluginInterface {
       properties.put("isClickable", true);
     }
     properties.put("isVisible", circleOptions.isVisible());
+
+    if (opts.has("strokePattern")) {
+      JSONArray patternArray = opts.getJSONArray("strokePattern");
+
+      float ln = 6F;
+      List<PatternItem> pattern = new ArrayList<PatternItem>();
+      
+      for(int i=0; i<patternArray.length(); i++){
+        JSONObject object = patternArray.getJSONObject(i);
+        if(object.has("symbol")){
+          String symbol = object.getString("symbol");
+          if(Objects.equals("DOT", symbol)){
+            pattern.add(new Dot());
+          }else{
+            if(object.has("length")) ln = (float)object.getDouble("length");
+            if(Objects.equals("DASH", symbol)){
+              pattern.add(new Dash(ln));
+            }
+            if(Objects.equals("GAP", symbol)){
+              pattern.add(new Gap(ln));
+            }
+          }
+        }
+      }
+
+      circleOptions.strokePattern(pattern);
+    }
 
     // Since this plugin provide own click detection,
     // disable default clickable feature.

@@ -102,6 +102,7 @@ public class PluginPolyline extends MyPlugin implements MyPluginInterface  {
 
       polylineOptions.pattern(pattern);
     }
+    
     // Since this plugin provide own click detection,
     // disable default clickable feature.
     polylineOptions.clickable(false);

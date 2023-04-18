@@ -4,6 +4,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
@@ -13,6 +17,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 
 //Future implement
 //TODO: https://codepen.io/jhawes/pen/ujdgK
@@ -103,6 +109,33 @@ public class PluginPolygon extends MyPlugin implements MyPluginInterface  {
         properties.put("isVisible", polygonOptions.isVisible());
         properties.put("zIndex", polygonOptions.getZIndex());
         properties.put("isGeodesic", polygonOptions.isGeodesic());
+
+        if (opts.has("strokePattern")) {
+          JSONArray patternArray = opts.getJSONArray("strokePattern");
+    
+          float ln = 6F;
+          List<PatternItem> pattern = new ArrayList<PatternItem>();
+          
+          for(int i=0; i<patternArray.length(); i++){
+            JSONObject object = patternArray.getJSONObject(i);
+            if(object.has("symbol")){
+              String symbol = object.getString("symbol");
+              if(Objects.equals("DOT", symbol)){
+                pattern.add(new Dot());
+              }else{
+                if(object.has("length")) ln = (float)object.getDouble("length");
+                if(Objects.equals("DASH", symbol)){
+                  pattern.add(new Dash(ln));
+                }
+                if(Objects.equals("GAP", symbol)){
+                  pattern.add(new Gap(ln));
+                }
+              }
+            }
+          }
+    
+          polygonOptions.strokePattern(pattern);
+        }
 
         // Since this plugin uses own detecting process,
         // set false to the clickable property.

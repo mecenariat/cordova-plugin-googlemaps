@@ -167,7 +167,6 @@ public class PluginUtil {
   public static int parsePluginColor(JSONArray arrayRGBA) throws JSONException {
     return Color.argb(arrayRGBA.getInt(3), arrayRGBA.getInt(0), arrayRGBA.getInt(1), arrayRGBA.getInt(2));
   }
-
   public static ArrayList<LatLng> JSONArray2LatLngList(JSONArray points) throws JSONException  {
     ArrayList<LatLng> path = new ArrayList<LatLng>();
     JSONObject pointJSON;
