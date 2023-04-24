@@ -100,12 +100,6 @@
       polyline.strokeWidth = [[json valueForKey:@"width"] floatValue];
       polyline.zIndex = [[json valueForKey:@"zIndex"] floatValue];
 
-      if([[json valueForKey:@"geodesic"] boolValue]){
-
-      }
-
-      // niestety w tym jęzuku nie ma możliwości stworzenia kropkowanej polilinii
-
       // Since this plugin provide own click detection,
       // disable default clickable feature.
       polyline.tappable = NO;
